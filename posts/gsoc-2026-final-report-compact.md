@@ -4,10 +4,10 @@ Title: "SAGE — GSoC 2026 Final Report"
 
 # LLM-Assisted Extraction of Agronomic and Ecological Experiments into Structured Data
 
-**Google Summer of Code 2026 · PEcAn Project · Contributor: [Abhishek Kumar Rai](https://github.com/Abhishek-Kumar-Rai5)
-**
+## Google Summer of Code 2026 · PEcAn Project · 
+Contributor: [Abhishek Kumar Rai](https://github.com/Abhishek-Kumar-Rai5)
 
-**Mentors:** David LeBauer, Nihar Sanda, Pratik Pakhale
+**Mentors:** [David LeBauer](https://github.com/Abhishek-Kumar-Rai5), Nihar Sanda, Pratik Pakhale
 
 **Code and PRs:** https://github.com/PecanProject/sage/pulls
 
