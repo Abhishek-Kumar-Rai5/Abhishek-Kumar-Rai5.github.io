@@ -1,0 +1,1 @@
+This repo contains my final report about the GSOC 2026 project - LLM-Assisted Extraction of Agronomic and Ecological Experiments into Structured Data which I did under the guidance of my mentors:- david LeBauer, Nihar Sanda and Pratik Pakhale.
