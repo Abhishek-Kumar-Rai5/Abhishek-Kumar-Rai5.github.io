@@ -1,10 +1,11 @@
 ---
-title: "SAGE — GSoC 2026 Final Report"
+Title: "SAGE — GSoC 2026 Final Report"
 ---
 
-# SAGE: LLM extraction of agronomic papers into a structured, reviewable IR
+# LLM-Assisted Extraction of Agronomic and Ecological Experiments into Structured Data
 
-**Google Summer of Code 2026 · PEcAn Project · Contributor: Abhishek Kumar Rai**
+**Google Summer of Code 2026 · PEcAn Project · Contributor: [Abhishek Kumar Rai](https://github.com/Abhishek-Kumar-Rai5)
+**
 
 **Mentors:** David LeBauer, Nihar Sanda, Pratik Pakhale
 
