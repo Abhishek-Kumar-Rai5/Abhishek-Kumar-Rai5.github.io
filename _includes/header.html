@@ -1,14 +1,22 @@
 <header class="site-header">
   <div class="wrapper">
-    <a class="site-title" href="{{ "/" | relative_url }}">{{ site.title | escape }}</a>
-    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode"></button>
+    <div class="site-header-left">
+      <a class="site-title" href="{{ "/" | relative_url }}">{{ site.title | escape }}</a>
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode"></button>
+    </div>
+    <nav class="site-nav">
+      <a href="{{ "/" | relative_url }}">~/posts</a>
+      <a href="https://github.com/PecanProject/sage" target="_blank" rel="noopener">~/sage</a>
+      <a href="https://github.com/PecanProject/sage/pulls?q=is%3Apr+author%3AAbhishek-Kumar-Rai5" target="_blank" rel="noopener">~/pulls</a>
+    </nav>
   </div>
 </header>
 <script>
   (function () {
+    // Defaults to dark on a visitor's first-ever visit; a manual toggle is
+    // remembered from then on (localStorage), regardless of OS preference.
     var stored = localStorage.getItem("theme");
-    var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    var theme = stored || (prefersDark ? "dark" : "light");
+    var theme = stored || "dark";
     document.documentElement.setAttribute("data-theme", theme);
 
     var btn = document.getElementById("theme-toggle");

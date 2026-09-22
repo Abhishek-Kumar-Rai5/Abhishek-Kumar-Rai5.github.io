@@ -5,6 +5,9 @@ layout: default
 
   <header class="post-header">
     <h1 class="post-title">{{ page.title | escape }}</h1>
+    {% if page.excerpt %}
+      <p class="post-subtitle">{{ page.excerpt | strip_html | strip_newlines }}</p>
+    {% endif %}
     <p class="post-meta">
       <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %-d, %Y" }}</time>
       {% assign words = content | number_of_words %}
@@ -14,6 +17,12 @@ layout: default
     </p>
     {% if page.cover %}
       <img class="post-cover" src="{{ page.cover | relative_url }}" alt="{{ page.title | escape }}">
+    {% else %}
+      <div class="post-hero">
+        <span class="post-hero-org">PEcAn Project</span>
+        <span class="post-hero-x">×</span>
+        <span class="post-hero-gsoc">Google Summer of Code 2026</span>
+      </div>
     {% endif %}
   </header>
 
