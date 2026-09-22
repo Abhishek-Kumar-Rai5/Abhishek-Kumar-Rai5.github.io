@@ -10,10 +10,19 @@ excerpt: >-
 cover: /assets/images/gsoc_header.png
 ---
 
+<div class="meta-card" markdown="1">
+
 **Organization:** [PEcAn Project](https://github.com/PecanProject/sage)
-**Mentors:** [David LeBauer](https://github.com/dlebauer), [Pratik Pakhale](https://github.com/pratikpakhale), [Nihar Sanda](https://github.com/koolgax99)
+
+**Mentors:** [David LeBauer](https://github.com/dlebauer) (`@dlebauer`), [Pratik Pakhale](https://github.com/pratikpakhale) (`@pratikpakhale`), [Nihar Sanda](https://github.com/koolgax99) (`@koolgax99`)
+
+**Student:** [Abhishek Kumar Rai](https://github.com/Abhishek-Kumar-Rai5) (`@Abhishek-Kumar-Rai5`)
+
 **Repository:** [github.com/PecanProject/sage](https://github.com/PecanProject/sage)
+
 **Pull requests:** [PecanProject/sage/pulls · author:Abhishek-Kumar-Rai5](https://github.com/PecanProject/sage/pulls?q=is%3Apr+author%3AAbhishek-Kumar-Rai5)
+
+</div>
 
 ## Project Summary
 

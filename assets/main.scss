@@ -144,6 +144,31 @@ body {
   color: #93c5fd;
 }
 
+/* Info card (org / mentors / student / repo / PRs) -- one field per line */
+.meta-card {
+  background: rgba(148, 163, 184, 0.08);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.3rem 1.5rem;
+  margin: 1.6rem 0 2.2rem;
+}
+
+.meta-card p {
+  margin: 0.55rem 0;
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+
+.meta-card strong {
+  color: var(--muted);
+  font-weight: 700;
+  margin-right: 0.3em;
+}
+
+.meta-card code {
+  font-size: 0.85em;
+}
+
 /* Post body */
 .post-content h2 {
   margin-top: 2.6rem;
