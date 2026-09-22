@@ -71,19 +71,136 @@ about missing information are enforced in code, not left to prompt instructions 
 ## Architecture
 
 ```text
-PDF ──Marker──▶ docproc adapter ──▶ content.md + provenance.json   (text blocks with ⟦b:NNNN⟧ anchors)
-                                          │
-                     ┌────────────────────┴─────────────────────┐
-                     ▼                                          ▼
-             ir_service (FastAPI, 15 endpoints)       opencode agents
-             schema · validation · storage            extractor  (sees the paper, never the schema)
-                     ▲                                converter  (sees the schema, never the paper)
-                     │                                ir_validator (observe-only second opinion)
-                     └──────────── orchestrator ◀─────────────────┘
-                     enumerate → extract → grounding gate → convert → validate → commit
-                                          │
-                                          ▼
-                       results store ──▶ Streamlit review UI ──▶ corrections log
+                         SAGE — Document → Structured IR → Human Review
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                                  INPUT                                               │
+│                                                                                     │
+│                         Research / Agronomic Paper (PDF)                             │
+└──────────────────────────────────────┬──────────────────────────────────────────────┘
+                                       │
+                                       ▼
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                            1. DOCUMENT PROCESSING                                    │
+│                                                                                     │
+│                                      Marker                                           │
+│                         PDF → structured document                                    │
+│                                      │                                              │
+│                                      ▼                                              │
+│                    ┌──────────────────────────────────────┐                         │
+│                    │           docproc adapter             │                         │
+│                    │                                      │                         │
+│                    │  content.md          provenance.json │                         │
+│                    │  ⟦b:NNNN⟧ anchors   page / section  │                         │
+│                    │                     / bounding box   │                         │
+│                    └──────────────────┬───────────────────┘                         │
+└───────────────────────────────────────┼─────────────────────────────────────────────┘
+                                        │
+                                        │ paper content + stable provenance
+                                        ▼
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                         2. EXTRACTION PIPELINE                                      │
+│                         Orchestrator + Agents                                       │
+│                                                                                     │
+│   ┌────────────────┐      ┌────────────────────┐      ┌────────────────────────┐   │
+│   │   ENUMERATION  │─────▶│   EXTRACTION       │─────▶│   GROUNDING /          │   │
+│   │                │      │      AGENT         │      │   DETERMINISTIC CHECKS  │   │
+│   │ tables         │      │                    │      │                         │   │
+│   │ variables      │      │ reads paper        │      │ source anchors          │   │
+│   │ treatments     │      │ extracts values    │      │ known-value checks      │   │
+│   │ methods        │      │ quotes evidence    │      │ table reconstruction    │   │
+│   │ observations   │      │ assigns provenance │      │ candidate matching      │   │
+│   └────────────────┘      └─────────┬──────────┘      └────────────┬────────────┘   │
+│                                     │                              │                 │
+│                                     │ extracted candidates        │ grounded        │
+│                                     │ + evidence                  │ candidates      │
+│                                     ▼                              ▼                 │
+│                          ┌────────────────────┐        ┌────────────────────────┐   │
+│                          │     CONVERSION     │───────▶│       VALIDATION        │   │
+│                          │       AGENT        │        │                        │   │
+│                          │                    │        │ IR/schema validation   │   │
+│                          │ paper-independent  │        │ AI validator           │   │
+│                          │ schema-aware       │        │ ready / unresolved /   │   │
+│                          │                    │        │ error classification   │   │
+│                          └────────────────────┘        └────────────┬───────────┘   │
+│                                                                     │               │
+│                                                                     │ only validated│
+│                                                                     ▼               │
+│                          ┌──────────────────────────────────────────────────────┐   │
+│                          │                    COMMIT                             │   │
+│                          │         validated records → IR service              │   │
+│                          └──────────────────────────────────────────────────────┘   │
+│                                                                                     │
+│  ┌──────────────────────────────────────────────────────────────────────────────┐   │
+│  │                         ORCHESTRATOR                                         │   │
+│  │  sequencing • retries • provider-failure handling • caching • run state     │   │
+│  │  deterministic fallbacks • bounded recovery • per-paper execution           │   │
+│  └──────────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                     │
+│        EXTRACTION AGENT                         CONVERSION AGENT                    │
+│        ───────────────                         ────────────────                    │
+│        Sees the paper                          Sees the IR schema                  │
+│        Does NOT see IR schema                  Does NOT see the paper              │
+└──────────────────────────────────────────┬──────────────────────────────────────────┘
+                                           │
+                                           ▼
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                              3. IR / DATA LAYER                                     │
+│                                                                                     │
+│                           ┌───────────────────────┐                                 │
+│                           │      ir_service       │                                 │
+│                           │       FastAPI         │                                 │
+│                           │                       │                                 │
+│                           │ schema & validation   │                                 │
+│                           │ records / sections    │                                 │
+│                           │ tables / rows / cells │                                 │
+│                           │ provenance            │                                 │
+│                           │ storage               │                                 │
+│                           └───────────┬───────────┘                                 │
+│                                       │                                             │
+│                                       ▼                                             │
+│                           ┌───────────────────────┐                                 │
+│                           │     RESULTS STORE     │                                 │
+│                           │                       │                                 │
+│                           │ paper / run outputs   │                                 │
+│                           │ manifests             │                                 │
+│                           │ extraction records    │                                 │
+│                           │ unresolved records    │                                 │
+│                           └───────────┬───────────┘                                 │
+└───────────────────────────────────────┼─────────────────────────────────────────────┘
+                                        │
+                                        ▼
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                              4. HUMAN REVIEW                                         │
+│                                                                                     │
+│                           ┌───────────────────────┐                                 │
+│                           │    STREAMLIT UI       │                                 │
+│                           │                       │                                 │
+│                           │ browse paper/results  │                                 │
+│                           │ inspect source       │                                 │
+│                           │ approve              │                                 │
+│                           │ edit values          │                                 │
+│                           │ resolve unresolved    │                                 │
+│                           │ inspect provenance   │                                 │
+│                           └───────────┬───────────┘                                 │
+│                                       │                                             │
+│                                       ▼                                             │
+│                           ┌───────────────────────┐                                 │
+│                           │   CORRECTIONS LOG     │                                 │
+│                           │                       │                                 │
+│                           │ original extraction  │                                 │
+│                           │ human correction     │                                 │
+│                           │ reviewer action      │                                 │
+│                           │ evidence / notes     │                                 │
+│                           └───────────────────────┘                                 │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+
+
+                         ─────────── CORE GUARANTEES ───────────
+
+             TRACEABILITY             SCHEMA SAFETY              HUMAN OVERSIGHT
+        value → source anchor      extraction ≠ conversion      unresolved ≠ guessed
+        → page / section          schema validation before      corrections preserved
+        → evidence text            commit                      separately
 ```
 
 The extractor and the converter are kept apart on purpose: the model that reads the paper never sees the IR schema,
@@ -171,12 +288,12 @@ confirmed unreliable.
 </figure>
 
 Actions are approve, edit (correct value / add note / relocate evidence / tell the agent), all appended to an
-immutable corrections log — the original extraction is never overwritten. Link fields (`*_id`) are hidden from
+immutable corrections log, the original extraction is never overwritten. Link fields (`*_id`) are hidden from
 review entirely, and Citation (auto-filled, low-priority bibliographic metadata) is collapsed by default.
 
 ### 6 · Document processing adapter — docproc ([#20](https://github.com/PecanProject/sage/pull/20))
 
-Turns Marker's raw block-tree JSON into `content.md` — one stable anchor after every rendered block — and
+Turns Marker's raw block-tree JSON into `content.md` :- one stable anchor after every rendered block and
 `provenance.json`, mapping each anchor to its page, section path, and polygon. Handles real Marker quirks discovered
 against live papers: double-escaped `<sup>` corruption from `--use_llm`, geometric row/column clustering for table
 cells, page-split table continuations, unhandled block types logged rather than dropped. A three-check QC gate
@@ -202,15 +319,15 @@ prompts/agent configs actually used, so any run's output can be traced back to p
 ### 8 · Review table redesign ([#22](https://github.com/PecanProject/sage/pull/22))
 
 The `result | source | actions` layout above replaced an earlier, code-heavy field view (`EXT`/`UNR`/`REF` status
-codes gone — state is written in words, and only when it isn't the ordinary case) — direct mentor feedback from
+codes gone :- state is written in words, and only when it isn't the ordinary case) — direct mentor feedback from
 review of the earlier UI. Also added: a feature request to fill Citation metadata from a DOI via Crossref instead of
 relying on the PDF's own text, since the validation paper's DOI is nowhere in its PDF.
 
-## Key Innovation: Deterministic Table Reconstruction
+## Deterministic Table Reconstruction
 
-The single largest piece of original engineering this program. Free-form LLM enumeration was confirmed, against a
+Free-form LLM enumeration was confirmed, against a
 real paper (a table crossing 6 populations × 3 maturities × 2 sites × 4 measures — up to 144 real reported values),
-to collapse the whole table into one candidate per measure, in two independent runs, regardless of prompt tuning —
+to collapse the whole table into one candidate per measure, in two independent runs, regardless of prompt tuning :-
 the model simply cannot reliably hold that much combinatorial structure in one free-form answer. Rather than
 continuing to prompt-engineer around it, the "how many distinct values exist" arithmetic was moved into
 deterministic code:
@@ -229,9 +346,9 @@ Step D — merge with free-form enumeration, told which anchors are already
 ```
 
 Everything downstream of candidate generation (linking, extraction, conversion, provenance validation, the
-refuse-to-guess gate, AI validation) is unchanged — this mechanism only changes what populates the candidate list.
+refuse-to-guess gate, AI validation) is unchanged, this mechanism only changes what populates the candidate list.
 Treatment identity for a table-sourced candidate is computed from canonical semantic content (normalized factor
-levels + resolved site), not from the table's own raw key names — a real early run produced 131 Treatment records
+levels + resolved site), not from the table's own raw key names :- a real early run produced 131 Treatment records
 where only ~68 were genuinely distinct, because "Location" vs. "Site" and "Ames, IA" vs. "Ames" were treated as
 different keys.
 
@@ -256,38 +373,6 @@ temporal context, canonical treatment identity, provider failures and resilience
 corrections stores, review-table rendering, field-state wording, approve/edit actions, link-field hiding, PDF-pane
 wiring. *(All three counts re-run and confirmed at report time.)*
 
-## Real-World Validation
-
-One complete, unmodified end-to-end pipeline execution against a real, previously-unprocessed paper —
-*Barrios-Masias, Cantwell & Jackson, 2010, "Cultivar mixtures of processing tomato in an organic agroecosystem"* —
-model `gpt-oss-120b`, no code changed mid-run:
-
-| Measurement | Result |
-|---|---:|
-| Runtime | **3 h 24 min** |
-| Model calls | **481** (extractor 201 · converter 174 · ir-validator 106) |
-| Records produced | **133** |
-| Ready | **96** |
-| Unresolved | **35** |
-| Error | **2** |
-| Provider-failed rounds | **47** (recovered without costing a content-retry attempt, bar one) |
-| Ready observations | **13** / 42 |
-
-Every one of the 13 ready Observation values was checked by hand against the paper text and is correct. The run also
-surfaced concrete, still-open problems rather than hiding them behind a "ready" status:
-
-- **Method pool incomplete for this run** — no soil-sampling, chamber-gas, or plant-sampling Method was extracted, so
-  8 soil observations and the 16 non-PAR cells of Table 1 were correctly refused (left unresolved) rather than
-  linked to a wrong Method.
-- **Two wrong Method links** slipped through anyway (fruit phosphorus → pH meter; harvestable fruit → colour
-  reflectance) — evidence that Method matching needs a stronger check, not just a broader pool.
-- **Date confusions in Management** — a cover-crop incorporation date and a harvest date were attached to the wrong
-  events (weeding, sulfur application).
-- Observation timing (days-after-planting) is not yet carried through into `temporal_info`, and Treatments are not
-  yet linked to their Study.
-- Figures are raster images in the source PDF, so nothing is extracted from them; the paper's DOI is not printed
-  anywhere in the PDF text.
-
 ## Technologies Used
 
 `Python` · `Pydantic` · `FastAPI` + `uvicorn` (IR service) · `httpx` · `pytest` (1,138 tests, all offline/mocked) ·
@@ -296,30 +381,16 @@ surfaced concrete, still-open problems rather than hiding them behind a "ready" 
 
 ## Known Limitations & Next Steps
 
-1. Stabilize Method enumeration (it drives most of the unresolved Observations) and re-check Method matching for
-   short/ambiguous names.
+1. Stabilize Method enumeration (it drives most of the unresolved Observations) and re-check Method matching for short/ambiguous names.
 2. Fix Management date parsing so an event's date is never attached to a different event.
 3. Carry days-after-planting into `Observation.temporal_info`, and link Treatments to their Study.
-4. Represent factorial designs (e.g. cover crop × cultivar mixture) more completely at the candidate-enumeration
-   level.
+4. Represent factorial designs (e.g. cover crop × cultivar mixture) more completely at the candidate-enumeration level.
 5. Citation metadata from DOI/Crossref instead of relying on the PDF's own text.
-6. Shorten the provider cool-down schedule — at the 2-hour mark of the validation run above, roughly half of elapsed
-   wall-clock time was spent waiting out provider cool-downs rather than making forward progress.
-7. Expand evaluation beyond one paper to a scored gold dataset and the remaining protocol validation papers.
+6. Improvements will  further  needed as each different paper will have a different kind of structure and layout that will need  work on. 
 
-## A Note From Me
-
-> The part of this project I'd point to first isn't any one entity type or endpoint — it's the number of places the
-> pipeline is designed to say "I don't know" instead of guessing. Watching free-form enumeration silently collapse a
-> 144-value table down to four candidates was the moment that stopped feeling like a prompting problem and started
-> feeling like an architecture problem — the fix wasn't a better prompt, it was moving the counting into code the
-> model never touches. Most of what's in this report is that same move, repeated: wherever an LLM's own judgment
-> couldn't be trusted to be conservative on its own, something deterministic sits in front of it and says no.
->
-> Thanks to David, Pratik and Nihar for the direction throughout — the review-table redesign in particular came
-> straight out of their feedback on the earlier version.
 
 ## Acknowledgments
 
-Thanks to David LeBauer, Pratik Pakhale and Nihar Sanda for mentoring this project, and to the PEcAn community for
-the Calibration and Validation Data Collection Protocol this pipeline was built to serve.
+Google Summer of Code (GSoC) stands as an excellent avenue for students to enhance their coding prowess and foster collaborative skills. It offers students the freedom to handpick projects that resonate with their interests, enabling them to refine their proficiency in specific areas. GSoC provides an exceptional platform for skill development and growth.
+
+Thanks to David LeBauer, Nihar Sanda and Pratik Pakhale for mentoring this project, the experience was really awesome and I liked all the interactions and meetings we had. It was really a one of a kind organization as well as experience. I am deeply thankful to all of you for your consistent support and guidance throughout the program. Your mentorship  was really marvellous and invaluable and I appreciate all the directions and guidance you provided  to me throughout the project. I am always open for future collaborations and further works with my you all on open source projects.
