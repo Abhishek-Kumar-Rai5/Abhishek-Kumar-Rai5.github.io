@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "GSoC 2026 Final Report: SAGE — LLM Extraction of Agronomic Papers into a Structured, Reviewable IR"
+title: "GSoC 2026 Final Report: SAGE - LLM-Assisted Extraction of Agronomic and Ecological Experiments into Structured Data"
 date: 2026-09-22 00:00:00 +0000
 author: Abhishek Kumar Rai
 tags: [GSoC 2026, PEcAn, LLM Agents, Python, FastAPI, Pydantic, Streamlit, Data Extraction]
