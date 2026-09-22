@@ -1,0 +1,13 @@
+title: Abhishek Kumar Rai
+description: >-
+  Notes on what I build — currently Google Summer of Code 2026 with the PEcAn Project.
+author: Abhishek Kumar Rai
+github_username: Abhishek-Kumar-Rai5
+
+theme: minima
+markdown: kramdown
+permalink: /posts/:title/
+show_excerpts: true
+
+plugins:
+  - jekyll-feed
