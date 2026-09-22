@@ -1,0 +1,25 @@
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="{{ "/" | relative_url }}">{{ site.title | escape }}</a>
+    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode"></button>
+  </div>
+</header>
+<script>
+  (function () {
+    var stored = localStorage.getItem("theme");
+    var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    var theme = stored || (prefersDark ? "dark" : "light");
+    document.documentElement.setAttribute("data-theme", theme);
+
+    var btn = document.getElementById("theme-toggle");
+    function setIcon(t) { btn.textContent = t === "dark" ? "☀️" : "🌙"; }
+    setIcon(theme);
+
+    btn.addEventListener("click", function () {
+      var next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", next);
+      localStorage.setItem("theme", next);
+      setIcon(next);
+    });
+  })();
+</script>
