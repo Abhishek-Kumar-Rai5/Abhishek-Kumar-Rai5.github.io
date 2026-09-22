@@ -724,7 +724,7 @@ result | source | actions.
 <figure>
 
   <img src="/assets/images/screenshot-library.png" alt="Streamlit paper library page">
-  <img src="/assets/images/screenshot-library_panel.png" alt="Streamlit paper library page">
+  <img src="/assets/images/screenshot-library.png" alt="Streamlit paper library page">
   <img src="/assets/images/screenshot-library_processing.png" alt="Streamlit paper library page">
 
   <figcaption>The paper library — upload, run Marker processing, and see each paper's processed / extracted / error status.</figcaption>
