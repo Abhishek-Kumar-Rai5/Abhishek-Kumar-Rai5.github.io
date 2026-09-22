@@ -2,12 +2,12 @@
 ---
 @import "minima";
 
+
 /* =========================================================
    THEME VARIABLES
    ========================================================= */
 
 :root {
-  /* Light theme */
   --text: #111827;
   --muted: #6b7280;
   --border: #d1d5db;
@@ -48,19 +48,13 @@ body {
 
 
 /* =========================================================
-   GLOBAL WIDTH
+   GLOBAL PAGE WIDTH
    ========================================================= */
-
-/*
- * Minima normally constrains the entire site to a relatively
- * narrow width. This report contains wide tables, figures and
- * architecture diagrams, so give the site substantially more
- * horizontal space on desktop.
- */
 
 .wrapper {
   width: min(92vw, 1400px);
   max-width: 1400px;
+
   margin-left: auto;
   margin-right: auto;
 }
@@ -88,17 +82,11 @@ body {
   padding-bottom: 1.25rem;
 }
 
-
-/* ---------------------------------------------------------
-   Header left side
-   --------------------------------------------------------- */
-
 .site-header-left {
   display: flex;
   align-items: center;
 
   gap: 1rem;
-
   min-width: 0;
 }
 
@@ -106,14 +94,12 @@ body {
   color: var(--text);
 
   font-weight: 800;
-
   font-size: clamp(1.8rem, 2.2vw, 2.6rem);
-
   line-height: 1.1;
+
   letter-spacing: -0.025em;
 
   white-space: nowrap;
-
   text-decoration: none;
 }
 
@@ -127,9 +113,7 @@ body {
 }
 
 
-/* ---------------------------------------------------------
-   Header navigation
-   --------------------------------------------------------- */
+/* Navigation */
 
 .site-nav {
   display: flex;
@@ -167,9 +151,7 @@ body {
 }
 
 
-/* ---------------------------------------------------------
-   Theme toggle
-   --------------------------------------------------------- */
+/* Theme toggle */
 
 .theme-toggle {
   flex: 0 0 auto;
@@ -178,7 +160,6 @@ body {
   height: 2.75rem;
 
   border: 1px solid var(--border);
-
   background: transparent;
 
   border-radius: 999px;
@@ -207,34 +188,44 @@ body {
 
 
 /* =========================================================
-   REPORT / POST HEADER
+   REPORT HEADER
    ========================================================= */
 
 .post-header {
   margin: 3rem 0 2.8rem;
 }
 
+
+/* Large report title */
+
 .post-title {
   max-width: 1200px;
+
   font-size: clamp(2rem, 2.8vw, 3rem);
   font-weight: 750;
+
   line-height: 1.18;
   letter-spacing: -0.018em;
+
   margin: 0 0 1.1rem;
 }
 
+
+/* Subtitle */
+
 .post-subtitle {
-  max-width: 1000px;
+  max-width: 1050px;
+
   color: var(--muted);
+
   font-size: 1.1rem;
   line-height: 1.6;
+
   margin: 0 0 1rem;
 }
 
 
-/* ---------------------------------------------------------
-   Metadata
-   --------------------------------------------------------- */
+/* Metadata */
 
 .post-meta {
   color: var(--muted);
@@ -249,9 +240,9 @@ body {
 }
 
 
-/* ---------------------------------------------------------
-   Cover image
-   --------------------------------------------------------- */
+/* =========================================================
+   COVER IMAGE
+   ========================================================= */
 
 .post-cover {
   display: block;
@@ -262,16 +253,15 @@ body {
   margin-top: 2rem;
 
   border: 1px solid var(--border);
-
   border-radius: 12px;
 
   object-fit: cover;
 }
 
 
-/* ---------------------------------------------------------
-   Fallback hero
-   --------------------------------------------------------- */
+/* =========================================================
+   DEFAULT HERO
+   ========================================================= */
 
 .post-hero {
   margin-top: 1.6rem;
@@ -320,11 +310,15 @@ body {
 
 
 /* =========================================================
-   REPORT CONTENT WIDTH
+   REPORT CONTENT
    ========================================================= */
 
 /*
- * The report itself can use the full 1400px container.
+ * The page itself remains wide.
+ *
+ * The actual report body is intentionally narrower and centered.
+ * This gives the prose a proper reading width while preserving
+ * the wide desktop presentation of the header and cover.
  */
 
 .post {
@@ -337,11 +331,17 @@ body {
 
 
 /*
- * Normal prose is deliberately narrower for readability.
+ * Center the normal report content.
  *
- * Wide elements such as tables, figures and architecture
- * diagrams are NOT affected because they are not direct
- * paragraph/list children.
+ * This includes:
+ *   - paragraphs
+ *   - lists
+ *   - headings
+ *   - blockquotes
+ *   - tables
+ *   - figures
+ *   - architecture diagrams
+ *   - fenced code blocks
  */
 
 .post-content > p,
@@ -350,34 +350,42 @@ body {
 .post-content > blockquote,
 .post-content > h2,
 .post-content > h3,
-.post-content > h4 {
-  max-width: 1050px;
+.post-content > h4,
+.post-content > table,
+.post-content > figure,
+.post-content > pre,
+.post-content > div.highlighter-rouge,
+.post-content > div.highlight,
+.post-content > .meta-card {
+  width: min(100%, 1050px);
+
+  margin-left: auto;
+  margin-right: auto;
+
+  box-sizing: border-box;
 }
 
 
 /* =========================================================
-   INFO CARD
+   INFO / META CARD
    ========================================================= */
 
 .meta-card {
   background: rgba(148, 163, 184, 0.08);
 
   border: 1px solid var(--border);
-
   border-radius: 10px;
 
   padding: 1.3rem 1.5rem;
 
-  margin: 1.6rem 0 2.2rem;
-
-  max-width: 1050px;
+  margin-top: 1.6rem;
+  margin-bottom: 2.2rem;
 }
 
 .meta-card p {
   margin: 0.55rem 0;
 
   font-size: 0.98rem;
-
   line-height: 1.5;
 }
 
@@ -395,32 +403,70 @@ body {
 
 
 /* =========================================================
-   POST BODY TYPOGRAPHY
+   TYPOGRAPHY
    ========================================================= */
 
-.post-content h2 {
-  margin-top: 2.6rem;
+.post-content {
+  font-size: 1rem;
+  line-height: 1.75;
+}
 
-  padding-bottom: 0.4rem;
+
+/* Section headings */
+
+.post-content h2 {
+  margin-top: 3rem;
+  margin-bottom: 1.4rem;
+
+  padding-bottom: 0.55rem;
 
   border-bottom: 1px solid var(--border);
 
-  max-width: 1050px;
+  font-size: 1.9rem;
+  line-height: 1.25;
 }
 
 .post-content h3 {
-  margin-top: 1.8rem;
+  margin-top: 2.2rem;
+  margin-bottom: 0.9rem;
 
-  max-width: 1050px;
+  font-size: 1.4rem;
+  line-height: 1.3;
 }
 
 .post-content h4 {
-  max-width: 1050px;
+  margin-top: 1.8rem;
+  margin-bottom: 0.7rem;
+
+  font-size: 1.15rem;
+}
+
+
+/* Paragraph spacing */
+
+.post-content p {
+  margin-top: 0;
+  margin-bottom: 1.15rem;
+}
+
+
+/* Lists */
+
+.post-content ul,
+.post-content ol {
+  margin-top: 0;
+  margin-bottom: 1.3rem;
+
+  padding-left: 1.6rem;
+}
+
+.post-content li {
+  margin-bottom: 0.35rem;
 }
 
 
 /* =========================================================
-   IMAGES
+   IMAGES AND FIGURES
    ========================================================= */
 
 .post-content img {
@@ -428,14 +474,12 @@ body {
   height: auto;
 
   border: 1px solid var(--border);
-
   border-radius: 6px;
 }
 
 .post-content figure {
-  width: 100%;
-
-  margin: 2rem 0;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 .post-content figcaption {
@@ -454,17 +498,11 @@ body {
    ========================================================= */
 
 .post-content table {
-  /*
-   * Wide report tables should use the available report width.
-   */
-
-  width: 100%;
+  width: min(100%, 1050px);
 
   border-collapse: collapse;
 
   font-size: 0.95rem;
-
-  display: table;
 
   color: var(--text);
 
@@ -480,7 +518,6 @@ body {
   padding: 0.7rem 0.9rem;
 
   text-align: left;
-
   vertical-align: top;
 }
 
@@ -501,16 +538,34 @@ body {
    INLINE CODE
    ========================================================= */
 
-.post-content code {
-  background: #f3f4f6;
+/*
+ * Inline code gets a restrained technical-documentation style.
+ *
+ * This applies only to inline code, not fenced code blocks.
+ */
 
-  color: #111827;
+.post-content :not(pre) > code {
+  background: #eef2f7;
 
-  padding: 0.1em 0.35em;
+  color: #1e3a5f;
 
-  border-radius: 4px;
+  padding: 0.14em 0.42em;
 
-  font-size: 0.9em;
+  border: 1px solid #cbd5e1;
+  border-radius: 5px;
+
+  font-size: 0.88em;
+
+  font-family:
+    "SFMono-Regular",
+    Consolas,
+    "Liberation Mono",
+    Menlo,
+    monospace;
+
+  letter-spacing: -0.01em;
+
+  white-space: nowrap;
 }
 
 
@@ -519,12 +574,9 @@ body {
    ========================================================= */
 
 /*
- * Minima/Rouge applies its own background and syntax colors
- * to fenced blocks. Those fixed colors were responsible for
- * much of the light/dark contrast problem.
+ * These remain inside the same centered 1050px reading column.
  *
- * Architecture diagrams are fenced `text` blocks, so they
- * use this same rendering path.
+ * They no longer stretch across the entire 1400px page.
  */
 
 .post-content div.highlighter-rouge,
@@ -535,7 +587,7 @@ body {
 }
 
 .post-content pre {
-  width: 100%;
+  width: min(100%, 1050px);
 
   box-sizing: border-box;
 
@@ -543,17 +595,14 @@ body {
 
   padding: 1.5rem;
 
-  margin: 2rem 0;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 
   border: 1px solid var(--border);
-
   border-radius: 10px;
 
   overflow-x: auto;
 
-  /*
-   * Critical for Unicode box-drawing architecture diagrams.
-   */
   white-space: pre;
 
   font-family:
@@ -600,7 +649,11 @@ body {
    ========================================================= */
 
 .post-tags {
+  width: min(100%, 1050px);
+
   margin-top: 2.6rem;
+  margin-left: auto;
+  margin-right: auto;
 
   padding-top: 1rem;
 
@@ -611,7 +664,6 @@ body {
   display: inline-block;
 
   background: #eff6ff;
-
   color: var(--accent);
 
   border-radius: 999px;
@@ -681,28 +733,24 @@ html[data-theme="dark"] {
   --table-row-alt: #172033;
 
 
-  /*
-   * Minima sets the body itself to its own background/color.
-   * The body therefore also needs to receive the dark theme.
-   */
+  /* Page */
 
   &,
   body {
     background-color: var(--page-bg);
-
     color: var(--text);
   }
 
 
-  /* -------------------------------------------------------
-     Header
-     ------------------------------------------------------- */
+  /* Header */
 
   .site-header {
     background-color: var(--page-bg);
-
     border-bottom-color: var(--border);
   }
+
+
+  /* Site title */
 
   .site-title,
   .site-title:visited {
@@ -713,6 +761,9 @@ html[data-theme="dark"] {
     color: var(--accent);
   }
 
+
+  /* Navigation */
+
   .site-nav a {
     color: var(--muted);
   }
@@ -722,9 +773,7 @@ html[data-theme="dark"] {
   }
 
 
-  /* -------------------------------------------------------
-     Typography
-     ------------------------------------------------------- */
+  /* Headings */
 
   h1,
   h2,
@@ -735,19 +784,23 @@ html[data-theme="dark"] {
     color: #f1f5f9;
   }
 
+
+  /* Subtitle / metadata */
+
   .post-subtitle,
   .post-meta {
     color: var(--muted);
   }
+
+
+  /* Links */
 
   a {
     color: var(--accent);
   }
 
 
-  /* -------------------------------------------------------
-     Tables
-     ------------------------------------------------------- */
+  /* Tables */
 
   .post-content table {
     color: var(--text);
@@ -769,20 +822,18 @@ html[data-theme="dark"] {
   }
 
 
-  /* -------------------------------------------------------
-     Inline code
-     ------------------------------------------------------- */
+  /* Inline code */
 
-  .post-content code {
-    background: #1e293b;
+  .post-content :not(pre) > code {
+    background: #172033;
 
-    color: #e2e8f0;
+    color: #bfdbfe;
+
+    border-color: #475569;
   }
 
 
-  /* -------------------------------------------------------
-     Fenced code / architecture diagrams
-     ------------------------------------------------------- */
+  /* Fenced code */
 
   .post-content div.highlighter-rouge,
   .post-content div.highlight,
@@ -794,9 +845,7 @@ html[data-theme="dark"] {
   }
 
 
-  /* -------------------------------------------------------
-     Images
-     ------------------------------------------------------- */
+  /* Images */
 
   .post-content img,
   .post-cover {
@@ -804,9 +853,7 @@ html[data-theme="dark"] {
   }
 
 
-  /* -------------------------------------------------------
-     Tags
-     ------------------------------------------------------- */
+  /* Tags */
 
   .tag-pill {
     background: #1e3a5f;
@@ -815,13 +862,14 @@ html[data-theme="dark"] {
   }
 
 
-  /* -------------------------------------------------------
-     Footer / list separators
-     ------------------------------------------------------- */
+  /* Home list */
 
   .post-list > li {
     border-bottom-color: var(--border);
   }
+
+
+  /* Footer */
 
   .site-footer {
     background-color: var(--page-bg);
@@ -832,21 +880,18 @@ html[data-theme="dark"] {
 
 
 /* =========================================================
-   RESPONSIVE — TABLET / MOBILE
+   RESPONSIVE — TABLET
    ========================================================= */
 
 @media screen and (max-width: 800px) {
 
   .wrapper {
     width: 92vw;
-
     max-width: none;
   }
 
 
-  /* -------------------------------------------------------
-     Header
-     ------------------------------------------------------- */
+  /* Header */
 
   .site-header-inner {
     flex-direction: column;
@@ -856,7 +901,6 @@ html[data-theme="dark"] {
     gap: 1rem;
 
     padding-top: 1rem;
-
     padding-bottom: 1rem;
   }
 
@@ -881,9 +925,7 @@ html[data-theme="dark"] {
   }
 
 
-  /* -------------------------------------------------------
-     Report
-     ------------------------------------------------------- */
+  /* Report header */
 
   .post-header {
     margin: 2.8rem 0 2.5rem;
@@ -900,9 +942,26 @@ html[data-theme="dark"] {
   }
 
 
-  /* -------------------------------------------------------
-     Tables
-     ------------------------------------------------------- */
+  /* Content */
+
+  .post-content > p,
+  .post-content > ul,
+  .post-content > ol,
+  .post-content > blockquote,
+  .post-content > h2,
+  .post-content > h3,
+  .post-content > h4,
+  .post-content > table,
+  .post-content > figure,
+  .post-content > pre,
+  .post-content > div.highlighter-rouge,
+  .post-content > div.highlight,
+  .post-content > .meta-card {
+    width: 100%;
+  }
+
+
+  /* Tables */
 
   .post-content table {
     display: block;
@@ -913,11 +972,11 @@ html[data-theme="dark"] {
   }
 
 
-  /* -------------------------------------------------------
-     Architecture diagrams / code
-     ------------------------------------------------------- */
+  /* Code / architecture diagrams */
 
   .post-content pre {
+    width: 100%;
+
     font-size: 0.76rem;
 
     padding: 1rem;
@@ -926,12 +985,22 @@ html[data-theme="dark"] {
   }
 
 
-  /* -------------------------------------------------------
-     Images
-     ------------------------------------------------------- */
+  /* Images */
 
   .post-content figure {
-    margin: 1.5rem 0;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+
+  /* Headings */
+
+  .post-content h2 {
+    font-size: 1.65rem;
+  }
+
+  .post-content h3 {
+    font-size: 1.25rem;
   }
 }
 
@@ -943,9 +1012,8 @@ html[data-theme="dark"] {
 @media screen and (max-width: 600px) {
 
   /*
-   * Minima's original navigation has a mobile dropdown rule.
-   * We are not using that hamburger navigation, so return our
-   * custom navigation to normal document flow.
+   * Minima's original mobile navigation rule is overridden
+   * because this site uses its own navigation layout.
    */
 
   .site-nav {
@@ -972,13 +1040,31 @@ html[data-theme="dark"] {
 
   .theme-toggle {
     width: 2.5rem;
-
     height: 2.5rem;
 
     font-size: 1rem;
   }
 
+
+  /* Smaller report title */
+
+  .post-title {
+    font-size: 2rem;
+
+    line-height: 1.12;
+  }
+
+
+  /* Smaller code */
+
   .post-content pre {
     font-size: 0.7rem;
+  }
+
+
+  /* Smaller inline code */
+
+  .post-content :not(pre) > code {
+    font-size: 0.84em;
   }
 }
