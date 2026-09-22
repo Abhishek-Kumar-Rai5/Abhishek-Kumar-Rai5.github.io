@@ -5,7 +5,7 @@ date: 2026-09-22 00:00:00 +0000
 author: Abhishek Kumar Rai
 tags: [GSoC 2026, PEcAn, LLM Agents, Python, FastAPI, Pydantic, Streamlit, Data Extraction]
 excerpt: >-
-  Google Summer of Code 2026 final report — building SAGE, an LLM pipeline that turns published crop-science
+  Google Summer of Code 2026 final report :- building SAGE, an LLM pipeline that turns published crop-science
   papers into a structured, source-grounded, human-reviewed intermediate representation for the PEcAn project.
 cover: /assets/images/gsoc_header.png
 ---
@@ -18,7 +18,7 @@ Student: [Abhishek Kumar Rai](https://github.com/Abhishek-Kumar-Rai5) (@Abhishek
 
 Repository: [github.com/PecanProject/sage](https://github.com/PecanProject/sage)
 
-Pull requests: [PecanProject/sage/pulls · author:Abhishek-Kumar-Rai5](https://github.com/PecanProject/sage/pulls?q=is%3Apr+author%3AAbhishek-Kumar-Rai5)
+Pull requests: [PecanProject/sage/pulls · author:Abhishek-Kumar-Rai5](https://github.com/PecanProject/sage/pulls)
 
 ## Project Summary
 
@@ -287,7 +287,7 @@ Actions are approve, edit (correct value / add note / relocate evidence / tell t
 immutable corrections log, the original extraction is never overwritten. Link fields (`*_id`) are hidden from
 review entirely, and Citation (auto-filled, low-priority bibliographic metadata) is collapsed by default.
 
-### 6 · Document processing adapter — docproc ([#20](https://github.com/PecanProject/sage/pull/20))
+### 6 · Document processing adapter :- docproc ([#20](https://github.com/PecanProject/sage/pull/20))
 
 Turns Marker's raw block-tree JSON into `content.md` :- one stable anchor after every rendered block and
 `provenance.json`, mapping each anchor to its page, section path, and polygon. Handles real Marker quirks discovered
