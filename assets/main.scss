@@ -3,11 +3,13 @@
 @import "minima";
 
 :root {
+  --text: #111;
   --muted: #6b7280;
   --border: #e5e7eb;
   --accent: #2563eb;
   --code-bg: #0f172a;
   --code-fg: #e2e8f0;
+  --table-row-alt: rgba(148, 163, 184, 0.06);
 }
 
 body {
@@ -58,6 +60,20 @@ body {
 
 .site-nav a:hover {
   color: var(--accent);
+}
+
+/* minima's own .site-nav has a max-width:600px rule that turns it into an
+   absolutely-positioned dropdown for its hamburger-menu nav -- we don't
+   use that (.nav-trigger/.menu-icon), so left alone it pulls our plain
+   links out of flow and overlaps the title on narrow screens. Put it back
+   in normal flow at that breakpoint too. */
+@media screen and (max-width: 600px) {
+  .site-nav {
+    position: static;
+    background: none;
+    border: 0;
+    padding: 0;
+  }
 }
 
 .theme-toggle {
@@ -201,10 +217,16 @@ body {
 }
 
 .post-content table {
+  /* minima's own table rule hard-codes color: lighten($text-color, 18%),
+     which stays a fixed mid-gray regardless of theme -- invisible against
+     a dark-mode background. Override at the table level so th/td inherit
+     a theme-aware color instead of that fixed one. */
   width: 100%;
   border-collapse: collapse;
   font-size: 0.92rem;
   display: table;
+  color: var(--text);
+  border-color: var(--border);
 }
 
 .post-content table th,
@@ -219,6 +241,13 @@ body {
   background: #f9fafb;
 }
 
+.post-content table tr:nth-child(even) {
+  /* minima also hard-codes this zebra-stripe background, independent of
+     theme; a translucent tint reads correctly on both light and dark
+     without needing a separate value per theme. */
+  background: var(--table-row-alt);
+}
+
 .post-content code {
   background: #f3f4f6;
   padding: 0.1em 0.35em;
@@ -230,8 +259,15 @@ body {
    background/token colors on .highlight and its descendants, which wins
    over a plain `.post-content pre` rule and stays the same regardless of
    our light/dark toggle. Force every layer back to our own two variables
-   so the block is always readable in both themes. */
-.post-content .highlighter-rouge,
+   so the block is always readable in both themes.
+   NOTE: `highlighter-rouge` is also the class Rouge puts on bare INLINE
+   `<code>` spans (e.g. `` `foo` `` -> <code class="... highlighter-rouge">),
+   not just on the fenced-block wrapper <div>. Scoping this to `div` keeps
+   it off inline code, which is styled by `.post-content code` below --
+   an earlier, untagged `.post-content .highlighter-rouge` version of this
+   rule matched inline code too and made it unreadable (dark bg, inherited
+   near-black text) in light mode. */
+.post-content div.highlighter-rouge,
 .post-content div.highlight,
 .post-content pre,
 .post-content pre.highlight {
@@ -301,6 +337,7 @@ body,
    <html data-theme="dark|light">, and the DEFAULT for a first-time
    visitor; an explicit toggle is remembered in localStorage. */
 html[data-theme="dark"] {
+  --text: #e2e8f0;
   --muted: #94a3b8;
   --border: #1e293b;
   --accent: #60a5fa;
