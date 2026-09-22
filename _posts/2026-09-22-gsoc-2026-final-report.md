@@ -7,6 +7,7 @@ tags: [GSoC 2026, PEcAn, LLM Agents, Python, FastAPI, Pydantic, Streamlit, Data 
 excerpt: >-
   Google Summer of Code 2026 final report — building SAGE, an LLM pipeline that turns published crop-science
   papers into a structured, source-grounded, human-reviewed intermediate representation for the PEcAn project.
+cover: /assets/images/gsoc_header.png
 ---
 
 **Organization:** [PEcAn Project](https://github.com/PecanProject/sage)
