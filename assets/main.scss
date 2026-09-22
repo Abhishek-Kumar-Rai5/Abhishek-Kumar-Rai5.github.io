@@ -265,12 +265,28 @@ html[data-theme="dark"] {
   --border: #1e293b;
   --accent: #60a5fa;
 
-  background-color: #0b1120;
-  color: #e2e8f0;
+  // minima's own base.scss sets an explicit background-color/color on
+  // `body` itself, which otherwise paints over a rule set only on `html`
+  // (body is a separate, opaque box sitting on top of it) -- these two
+  // selectors are what actually need to win, not just the outer element.
+  &,
+  body {
+    background-color: #0b1120;
+    color: #e2e8f0;
+  }
 
   .site-header {
     background-color: #0b1120;
     border-bottom-color: var(--border);
+  }
+
+  .post-subtitle,
+  .post-meta {
+    color: var(--muted);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: #f1f5f9;
   }
 
   .site-title,

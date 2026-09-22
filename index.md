@@ -1,6 +1,5 @@
 ---
 layout: home
-title: Abhishek Kumar Rai
 ---
 
 Hi, I'm Abhishek. This is where I write up what I build.
