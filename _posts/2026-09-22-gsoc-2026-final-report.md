@@ -5,8 +5,7 @@ date: 2026-09-22 00:00:00 +0000
 author: Abhishek Kumar Rai
 tags: [GSoC 2026, PEcAn, LLM Agents, Python, FastAPI, Pydantic, Streamlit, Data Extraction]
 excerpt: >-
-  Google Summer of Code 2026 final report :- building SAGE, an LLM pipeline that turns published crop-science
-  papers into a structured, source-grounded, human-reviewed intermediate representation for the PEcAn project.
+  Google Summer of Code 2026 final report :- building SAGE, an LLM pipeline that turns published crop-science papers into a structured, source-grounded, human-reviewed and BETYdb compatible database inputs for the PEcAn project.
 cover: /assets/images/gsoc_header.png
 ---
 
@@ -69,24 +68,24 @@ about missing information are enforced in code, not left to prompt instructions 
 ```text
                          SAGE — Document → Structured IR → Human Review
 ┌─────────────────────────────────────────────────────────────────────────────────────┐
-│                                  INPUT                                               │
+│                                  INPUT                                              │
 │                                                                                     │
-│                         Research / Agronomic Paper (PDF)                             │
+│                         Research / Agronomic Paper (PDF)                            │
 └──────────────────────────────────────┬──────────────────────────────────────────────┘
                                        │
                                        ▼
 ┌─────────────────────────────────────────────────────────────────────────────────────┐
-│                            1. DOCUMENT PROCESSING                                    │
+│                            1. DOCUMENT PROCESSING                                   │
 │                                                                                     │
-│                                      Marker                                           │
-│                         PDF → structured document                                    │
+│                                      Marker                                         │
+│                         PDF → structured document                                   │
 │                                      │                                              │
 │                                      ▼                                              │
 │                    ┌──────────────────────────────────────┐                         │
-│                    │           docproc adapter             │                         │
+│                    │           docproc adapter            │                         │
 │                    │                                      │                         │
 │                    │  content.md          provenance.json │                         │
-│                    │  ⟦b:NNNN⟧ anchors   page / section  │                         │
+│                    │  ⟦b:NNNN⟧ anchors   page / section    │                        │
 │                    │                     / bounding box   │                         │
 │                    └──────────────────┬───────────────────┘                         │
 └───────────────────────────────────────┼─────────────────────────────────────────────┘
@@ -97,21 +96,21 @@ about missing information are enforced in code, not left to prompt instructions 
 │                         2. EXTRACTION PIPELINE                                      │
 │                         Orchestrator + Agents                                       │
 │                                                                                     │
-│   ┌────────────────┐      ┌────────────────────┐      ┌────────────────────────┐   │
-│   │   ENUMERATION  │─────▶│   EXTRACTION       │─────▶│   GROUNDING /          │   │
-│   │                │      │      AGENT         │      │   DETERMINISTIC CHECKS  │   │
-│   │ tables         │      │                    │      │                         │   │
-│   │ variables      │      │ reads paper        │      │ source anchors          │   │
-│   │ treatments     │      │ extracts values    │      │ known-value checks      │   │
-│   │ methods        │      │ quotes evidence    │      │ table reconstruction    │   │
-│   │ observations   │      │ assigns provenance │      │ candidate matching      │   │
-│   └────────────────┘      └─────────┬──────────┘      └────────────┬────────────┘   │
-│                                     │                              │                 │
+│   ┌────────────────┐      ┌────────────────────┐      ┌────────────────────────┐    │
+│   │   ENUMERATION  │─────▶│   EXTRACTION      │─────▶│   GROUNDING /          │    │
+│   │                │      │      AGENT         │      │   DETERMINISTIC CHECKS │    │
+│   │ tables         │      │                    │      │                        │    │
+│   │ variables      │      │ reads paper        │      │ source anchors         │    │
+│   │ treatments     │      │ extracts values    │      │ known-value checks     │    │
+│   │ methods        │      │ quotes evidence    │      │ table reconstruction   │    │
+│   │ observations   │      │ assigns provenance │      │ candidate matching     │    │
+│   └────────────────┘      └─────────┬──────────┘      └────────────┬───────────┘    │
+│                                     │                              │                │
 │                                     │ extracted candidates        │ grounded        │
 │                                     │ + evidence                  │ candidates      │
-│                                     ▼                              ▼                 │
+│                                     ▼                              ▼                │
 │                          ┌────────────────────┐        ┌────────────────────────┐   │
-│                          │     CONVERSION     │───────▶│       VALIDATION        │   │
+│                          │     CONVERSION     │───────▶│       VALIDATION      │    |
 │                          │       AGENT        │        │                        │   │
 │                          │                    │        │ IR/schema validation   │   │
 │                          │ paper-independent  │        │ AI validator           │   │
@@ -122,20 +121,20 @@ about missing information are enforced in code, not left to prompt instructions 
 │                                                                     │ only validated│
 │                                                                     ▼               │
 │                          ┌──────────────────────────────────────────────────────┐   │
-│                          │                    COMMIT                             │   │
-│                          │         validated records → IR service              │   │
+│                          │                    COMMIT                            │   │
+│                          │         validated records → IR service               │   │
 │                          └──────────────────────────────────────────────────────┘   │
 │                                                                                     │
 │  ┌──────────────────────────────────────────────────────────────────────────────┐   │
 │  │                         ORCHESTRATOR                                         │   │
-│  │  sequencing • retries • provider-failure handling • caching • run state     │   │
-│  │  deterministic fallbacks • bounded recovery • per-paper execution           │   │
+│  │  sequencing • retries • provider-failure handling • caching • run state      │   │
+│  │  deterministic fallbacks • bounded recovery • per-paper execution            │   │
 │  └──────────────────────────────────────────────────────────────────────────────┘   │
 │                                                                                     │
 │        EXTRACTION AGENT                         CONVERSION AGENT                    │
-│        ───────────────                         ────────────────                    │
-│        Sees the paper                          Sees the IR schema                  │
-│        Does NOT see IR schema                  Does NOT see the paper              │
+│        ───────────────                         ────────────────                     │
+│        Sees the paper                          Sees the IR schema                   │
+│        Does NOT see IR schema                  Does NOT see the paper               │
 └──────────────────────────────────────────┬──────────────────────────────────────────┘
                                            │
                                            ▼
@@ -166,27 +165,27 @@ about missing information are enforced in code, not left to prompt instructions 
                                         │
                                         ▼
 ┌─────────────────────────────────────────────────────────────────────────────────────┐
-│                              4. HUMAN REVIEW                                         │
+│                              4. HUMAN REVIEW                                        │
 │                                                                                     │
 │                           ┌───────────────────────┐                                 │
 │                           │    STREAMLIT UI       │                                 │
 │                           │                       │                                 │
 │                           │ browse paper/results  │                                 │
-│                           │ inspect source       │                                 │
-│                           │ approve              │                                 │
-│                           │ edit values          │                                 │
+│                           │ inspect source        │                                 │
+│                           │ approve               │                                 │
+│                           │ edit values           │                                 │
 │                           │ resolve unresolved    │                                 │
-│                           │ inspect provenance   │                                 │
+│                           │ inspect provenance    │                                 │
 │                           └───────────┬───────────┘                                 │
 │                                       │                                             │
 │                                       ▼                                             │
 │                           ┌───────────────────────┐                                 │
 │                           │   CORRECTIONS LOG     │                                 │
 │                           │                       │                                 │
-│                           │ original extraction  │                                 │
-│                           │ human correction     │                                 │
-│                           │ reviewer action      │                                 │
-│                           │ evidence / notes     │                                 │
+│                           │ original extraction   │                                 │
+│                           │ human correction      │                                 │
+│                           │ reviewer action       │                                 │
+│                           │ evidence / notes      │                                 │
 │                           └───────────────────────┘                                 │
 └─────────────────────────────────────────────────────────────────────────────────────┘
 

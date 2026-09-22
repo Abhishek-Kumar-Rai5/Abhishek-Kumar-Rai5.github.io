@@ -1,30 +1,60 @@
 <header class="site-header">
-  <div class="wrapper">
+  <div class="wrapper site-header-inner">
+
     <div class="site-header-left">
-      <a class="site-title" href="{{ "/" | relative_url }}">{{ site.title | escape }}</a>
-      <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode"></button>
+      <a class="site-title" href="{{ "/" | relative_url }}">
+        {{ site.title | escape }}
+      </a>
+
+      <button
+        id="theme-toggle"
+        class="theme-toggle"
+        type="button"
+        aria-label="Toggle dark mode"
+        title="Toggle dark mode">
+      </button>
     </div>
-    <nav class="site-nav">
+
+    <nav class="site-nav" aria-label="Primary navigation">
       <a href="{{ "/" | relative_url }}">~/posts</a>
-      <a href="https://github.com/PecanProject/sage" target="_blank" rel="noopener">~/sage</a>
-      <a href="https://github.com/PecanProject/sage/pulls?q=is%3Apr+author%3AAbhishek-Kumar-Rai5" target="_blank" rel="noopener">~/pulls</a>
+      <a
+        href="https://github.com/PecanProject/sage"
+        target="_blank"
+        rel="noopener">
+        ~/sage
+      </a>
+      <a
+        href="https://github.com/PecanProject/sage/pulls"
+        target="_blank"
+        rel="noopener">
+        ~/pulls
+      </a>
     </nav>
+
   </div>
 </header>
+
 <script>
   (function () {
-    // Defaults to dark on a visitor's first-ever visit; a manual toggle is
-    // remembered from then on (localStorage), regardless of OS preference.
     var stored = localStorage.getItem("theme");
     var theme = stored || "dark";
+
     document.documentElement.setAttribute("data-theme", theme);
 
     var btn = document.getElementById("theme-toggle");
-    function setIcon(t) { btn.textContent = t === "dark" ? "☀️" : "🌙"; }
+
+    function setIcon(t) {
+      btn.textContent = t === "dark" ? "☀️" : "🌙";
+    }
+
     setIcon(theme);
 
     btn.addEventListener("click", function () {
-      var next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      var next =
+        document.documentElement.getAttribute("data-theme") === "dark"
+          ? "light"
+          : "dark";
+
       document.documentElement.setAttribute("data-theme", next);
       localStorage.setItem("theme", next);
       setIcon(next);

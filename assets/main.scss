@@ -2,124 +2,245 @@
 ---
 @import "minima";
 
+/* =========================================================
+   THEME VARIABLES
+   ========================================================= */
+
 :root {
-  --text: #111;
+  /* Light theme */
+  --text: #111827;
   --muted: #6b7280;
-  --border: #e5e7eb;
+  --border: #d1d5db;
   --accent: #2563eb;
-  --code-bg: #0f172a;
-  --code-fg: #e2e8f0;
-  --table-row-alt: rgba(148, 163, 184, 0.06);
+
+  --page-bg: #ffffff;
+
+  --code-bg: #f3f4f6;
+  --code-fg: #111827;
+
+  --table-bg: #ffffff;
+  --table-header-bg: #f3f4f6;
+  --table-row-alt: #f9fafb;
+}
+
+
+/* =========================================================
+   BASE
+   ========================================================= */
+
+html {
+  background-color: var(--page-bg);
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+
+  background-color: var(--page-bg);
+  color: var(--text);
 }
+
+
+/* =========================================================
+   GLOBAL WIDTH
+   ========================================================= */
+
+/*
+ * Minima normally constrains the entire site to a relatively
+ * narrow width. This report contains wide tables, figures and
+ * architecture diagrams, so give the site substantially more
+ * horizontal space on desktop.
+ */
 
 .wrapper {
-  max-width: 820px;
+  width: min(92vw, 1400px);
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/* Header: site title + toggle on the left, ~/path nav on the right */
+
+/* =========================================================
+   SITE HEADER
+   ========================================================= */
+
 .site-header {
   border-bottom: 1px solid var(--border);
+  background: var(--page-bg);
 }
 
-.site-header .wrapper {
+.site-header-inner {
+  min-height: 88px;
+
   display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  padding-top: 1.2rem;
-  padding-bottom: 1.1rem;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 2rem;
+
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
 }
+
+
+/* ---------------------------------------------------------
+   Header left side
+   --------------------------------------------------------- */
 
 .site-header-left {
   display: flex;
   align-items: center;
-  gap: 0.9rem;
+
+  gap: 1rem;
+
+  min-width: 0;
 }
 
 .site-title {
+  color: var(--text);
+
   font-weight: 800;
-  font-size: 1.7rem;
+
+  font-size: clamp(1.8rem, 2.2vw, 2.6rem);
+
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+
+  white-space: nowrap;
+
+  text-decoration: none;
 }
+
+.site-title:visited {
+  color: var(--text);
+}
+
+.site-title:hover {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+
+/* ---------------------------------------------------------
+   Header navigation
+   --------------------------------------------------------- */
 
 .site-nav {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
+
   flex-wrap: wrap;
-  gap: 1.3rem;
+
+  gap: 1.75rem;
+
+  margin-left: auto;
 }
 
 .site-nav a {
-  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-  font-size: 0.88rem;
+  font-family:
+    "SFMono-Regular",
+    Consolas,
+    "Liberation Mono",
+    Menlo,
+    monospace;
+
+  font-size: 1rem;
+  font-weight: 500;
+
   color: var(--muted);
+
   text-decoration: none;
+  white-space: nowrap;
+
+  transition: color 0.15s ease;
 }
 
 .site-nav a:hover {
   color: var(--accent);
 }
 
-/* minima's own .site-nav has a max-width:600px rule that turns it into an
-   absolutely-positioned dropdown for its hamburger-menu nav -- we don't
-   use that (.nav-trigger/.menu-icon), so left alone it pulls our plain
-   links out of flow and overlaps the title on narrow screens. Put it back
-   in normal flow at that breakpoint too. */
-@media screen and (max-width: 600px) {
-  .site-nav {
-    position: static;
-    background: none;
-    border: 0;
-    padding: 0;
-  }
-}
+
+/* ---------------------------------------------------------
+   Theme toggle
+   --------------------------------------------------------- */
 
 .theme-toggle {
+  flex: 0 0 auto;
+
+  width: 2.75rem;
+  height: 2.75rem;
+
   border: 1px solid var(--border);
+
   background: transparent;
+
   border-radius: 999px;
-  width: 2.1rem;
-  height: 2.1rem;
+
   cursor: pointer;
-  font-size: 0.95rem;
+
+  font-size: 1.1rem;
   line-height: 1;
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
+
   padding: 0;
+
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.15s ease;
 }
 
 .theme-toggle:hover {
   border-color: var(--accent);
+  transform: scale(1.05);
 }
 
-/* Post header: big bold title, subtitle, meta line, hero band */
+
+/* =========================================================
+   REPORT / POST HEADER
+   ========================================================= */
+
 .post-header {
-  margin: 2.4rem 0 2.2rem;
+  margin: 3rem 0 2.8rem;
 }
 
 .post-title {
-  /* Scales down for long titles instead of wrapping tight to 2.4rem on
-     every screen size -- keeps a long headline from looking congested. */
-  font-size: clamp(1.7rem, calc(1.1rem + 2.4vw), 2.4rem);
-  font-weight: 800;
-  line-height: 1.3;
-  letter-spacing: -0.01em;
-  margin-bottom: 0.9rem;
+  max-width: 1200px;
+  font-size: clamp(2rem, 2.8vw, 3rem);
+  font-weight: 750;
+  line-height: 1.18;
+  letter-spacing: -0.018em;
+  margin: 0 0 1.1rem;
 }
 
 .post-subtitle {
+  max-width: 1000px;
   color: var(--muted);
   font-size: 1.1rem;
   line-height: 1.6;
   margin: 0 0 1rem;
 }
 
+
+/* ---------------------------------------------------------
+   Metadata
+   --------------------------------------------------------- */
+
 .post-meta {
   color: var(--muted);
-  font-size: 0.9rem;
+
+  font-size: 0.95rem;
+
   margin-top: 0.2rem;
 }
 
@@ -127,60 +248,144 @@ body {
   margin: 0 0.4em;
 }
 
+
+/* ---------------------------------------------------------
+   Cover image
+   --------------------------------------------------------- */
+
 .post-cover {
-  width: 100%;
-  border-radius: 10px;
-  margin-top: 1.4rem;
   display: block;
+
+  width: 100%;
+  height: auto;
+
+  margin-top: 2rem;
+
+  border: 1px solid var(--border);
+
+  border-radius: 12px;
+
+  object-fit: cover;
 }
+
+
+/* ---------------------------------------------------------
+   Fallback hero
+   --------------------------------------------------------- */
 
 .post-hero {
   margin-top: 1.6rem;
+
   padding: 2.4rem 1.5rem;
+
   border-radius: 12px;
+
   text-align: center;
-  background: linear-gradient(135deg, #0b1120, #1e3a5f);
+
+  background:
+    linear-gradient(
+      135deg,
+      #0b1120,
+      #1e3a5f
+    );
+
   border: 1px solid #1e293b;
 }
 
 .post-hero-org {
   display: block;
+
   font-size: 1.4rem;
   font-weight: 800;
+
   color: #f8fafc;
 }
 
 .post-hero-x {
   display: block;
+
   margin: 0.35rem 0;
+
   color: #64748b;
 }
 
 .post-hero-gsoc {
   display: block;
+
   font-size: 1rem;
   font-weight: 600;
+
   color: #93c5fd;
 }
 
-/* Info card (org / mentors / student / repo / PRs) -- one field per line */
+
+/* =========================================================
+   REPORT CONTENT WIDTH
+   ========================================================= */
+
+/*
+ * The report itself can use the full 1400px container.
+ */
+
+.post {
+  width: 100%;
+}
+
+.post-content {
+  width: 100%;
+}
+
+
+/*
+ * Normal prose is deliberately narrower for readability.
+ *
+ * Wide elements such as tables, figures and architecture
+ * diagrams are NOT affected because they are not direct
+ * paragraph/list children.
+ */
+
+.post-content > p,
+.post-content > ul,
+.post-content > ol,
+.post-content > blockquote,
+.post-content > h2,
+.post-content > h3,
+.post-content > h4 {
+  max-width: 1050px;
+}
+
+
+/* =========================================================
+   INFO CARD
+   ========================================================= */
+
 .meta-card {
   background: rgba(148, 163, 184, 0.08);
+
   border: 1px solid var(--border);
+
   border-radius: 10px;
+
   padding: 1.3rem 1.5rem;
+
   margin: 1.6rem 0 2.2rem;
+
+  max-width: 1050px;
 }
 
 .meta-card p {
   margin: 0.55rem 0;
+
   font-size: 0.98rem;
+
   line-height: 1.5;
 }
 
 .meta-card strong {
   color: var(--muted);
+
   font-weight: 700;
+
   margin-right: 0.3em;
 }
 
@@ -188,85 +393,140 @@ body {
   font-size: 0.85em;
 }
 
-/* Post body */
+
+/* =========================================================
+   POST BODY TYPOGRAPHY
+   ========================================================= */
+
 .post-content h2 {
   margin-top: 2.6rem;
+
   padding-bottom: 0.4rem;
+
   border-bottom: 1px solid var(--border);
+
+  max-width: 1050px;
 }
 
 .post-content h3 {
   margin-top: 1.8rem;
+
+  max-width: 1050px;
 }
+
+.post-content h4 {
+  max-width: 1050px;
+}
+
+
+/* =========================================================
+   IMAGES
+   ========================================================= */
 
 .post-content img {
   max-width: 100%;
+  height: auto;
+
   border: 1px solid var(--border);
+
   border-radius: 6px;
 }
 
 .post-content figure {
-  margin: 1.6rem 0;
+  width: 100%;
+
+  margin: 2rem 0;
 }
 
 .post-content figcaption {
   color: var(--muted);
+
   font-size: 0.85rem;
+
   text-align: center;
-  margin-top: 0.5rem;
+
+  margin-top: 0.6rem;
 }
 
+
+/* =========================================================
+   TABLES
+   ========================================================= */
+
 .post-content table {
-  /* minima's own table rule hard-codes color: lighten($text-color, 18%),
-     which stays a fixed mid-gray regardless of theme -- invisible against
-     a dark-mode background. Override at the table level so th/td inherit
-     a theme-aware color instead of that fixed one. */
+  /*
+   * Wide report tables should use the available report width.
+   */
+
   width: 100%;
+
   border-collapse: collapse;
-  font-size: 0.92rem;
+
+  font-size: 0.95rem;
+
   display: table;
+
   color: var(--text);
-  border-color: var(--border);
+
+  background: var(--table-bg);
+
+  border: 1px solid var(--border);
 }
 
 .post-content table th,
 .post-content table td {
   border: 1px solid var(--border);
-  padding: 0.5rem 0.7rem;
+
+  padding: 0.7rem 0.9rem;
+
   text-align: left;
+
   vertical-align: top;
 }
 
 .post-content table th {
-  background: #f9fafb;
+  background: var(--table-header-bg);
+
+  color: var(--text);
+
+  font-weight: 700;
 }
 
 .post-content table tr:nth-child(even) {
-  /* minima also hard-codes this zebra-stripe background, independent of
-     theme; a translucent tint reads correctly on both light and dark
-     without needing a separate value per theme. */
   background: var(--table-row-alt);
 }
 
+
+/* =========================================================
+   INLINE CODE
+   ========================================================= */
+
 .post-content code {
   background: #f3f4f6;
+
+  color: #111827;
+
   padding: 0.1em 0.35em;
+
   border-radius: 4px;
+
   font-size: 0.9em;
 }
 
-/* Fenced code blocks: minima's bundled Rouge theme sets its own fixed
-   background/token colors on .highlight and its descendants, which wins
-   over a plain `.post-content pre` rule and stays the same regardless of
-   our light/dark toggle. Force every layer back to our own two variables
-   so the block is always readable in both themes.
-   NOTE: `highlighter-rouge` is also the class Rouge puts on bare INLINE
-   `<code>` spans (e.g. `` `foo` `` -> <code class="... highlighter-rouge">),
-   not just on the fenced-block wrapper <div>. Scoping this to `div` keeps
-   it off inline code, which is styled by `.post-content code` below --
-   an earlier, untagged `.post-content .highlighter-rouge` version of this
-   rule matched inline code too and made it unreadable (dark bg, inherited
-   near-black text) in light mode. */
+
+/* =========================================================
+   FENCED CODE BLOCKS / ARCHITECTURE DIAGRAMS
+   ========================================================= */
+
+/*
+ * Minima/Rouge applies its own background and syntax colors
+ * to fenced blocks. Those fixed colors were responsible for
+ * much of the light/dark contrast problem.
+ *
+ * Architecture diagrams are fenced `text` blocks, so they
+ * use this same rendering path.
+ */
+
 .post-content div.highlighter-rouge,
 .post-content div.highlight,
 .post-content pre,
@@ -275,95 +535,173 @@ body {
 }
 
 .post-content pre {
+  width: 100%;
+
+  box-sizing: border-box;
+
   color: var(--code-fg);
-  padding: 1rem;
-  border-radius: 8px;
+
+  padding: 1.5rem;
+
+  margin: 2rem 0;
+
+  border: 1px solid var(--border);
+
+  border-radius: 10px;
+
   overflow-x: auto;
+
+  /*
+   * Critical for Unicode box-drawing architecture diagrams.
+   */
+  white-space: pre;
+
+  font-family:
+    "SFMono-Regular",
+    Consolas,
+    "Liberation Mono",
+    Menlo,
+    monospace;
+
+  font-size: 0.86rem;
+
+  line-height: 1.4;
 }
 
 .post-content pre code,
 .post-content pre * {
-  background: none !important;
+  background: transparent !important;
+
   color: inherit !important;
+
   padding: 0;
+
+  white-space: inherit;
 }
+
+
+/* =========================================================
+   BLOCKQUOTES
+   ========================================================= */
 
 .post-content blockquote {
   border-left: 3px solid var(--accent);
+
   padding-left: 1rem;
+
   color: var(--muted);
+
   font-style: italic;
 }
 
-/* Tag pills at the end of a post */
+
+/* =========================================================
+   TAGS
+   ========================================================= */
+
 .post-tags {
   margin-top: 2.6rem;
+
   padding-top: 1rem;
+
   border-top: 1px solid var(--border);
 }
 
 .tag-pill {
   display: inline-block;
+
   background: #eff6ff;
+
   color: var(--accent);
+
   border-radius: 999px;
+
   padding: 0.25em 0.9em;
+
   margin: 0 0.4em 0.4em 0;
+
   font-size: 0.82rem;
 }
 
-/* Home page post list */
+
+/* =========================================================
+   HOME PAGE POST LIST
+   ========================================================= */
+
 .post-list .post-link {
   font-size: 1.4rem;
 }
 
 .post-list > li {
   margin-bottom: 2rem;
+
   padding-bottom: 1.4rem;
+
   border-bottom: 1px solid var(--border);
 }
 
-/* Smooth theme switch */
+
+/* =========================================================
+   SMOOTH THEME SWITCH
+   ========================================================= */
+
 body,
 .site-header,
 .site-footer,
+.post-content table,
 .post-content table th,
+.post-content table td,
 .post-content code,
+.post-content pre,
 .tag-pill {
-  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
 }
 
-/* Dark theme -- toggled by header.html's inline script setting
-   <html data-theme="dark|light">, and the DEFAULT for a first-time
-   visitor; an explicit toggle is remembered in localStorage. */
+
+/* =========================================================
+   DARK THEME
+   ========================================================= */
+
 html[data-theme="dark"] {
   --text: #e2e8f0;
   --muted: #94a3b8;
-  --border: #1e293b;
+  --border: #334155;
   --accent: #60a5fa;
 
-  // minima's own base.scss sets an explicit background-color/color on
-  // `body` itself, which otherwise paints over a rule set only on `html`
-  // (body is a separate, opaque box sitting on top of it) -- these two
-  // selectors are what actually need to win, not just the outer element.
+  --page-bg: #0b1120;
+
+  --code-bg: #111827;
+  --code-fg: #e5e7eb;
+
+  --table-bg: #0f172a;
+  --table-header-bg: #1e293b;
+  --table-row-alt: #172033;
+
+
+  /*
+   * Minima sets the body itself to its own background/color.
+   * The body therefore also needs to receive the dark theme.
+   */
+
   &,
   body {
-    background-color: #0b1120;
-    color: #e2e8f0;
+    background-color: var(--page-bg);
+
+    color: var(--text);
   }
+
+
+  /* -------------------------------------------------------
+     Header
+     ------------------------------------------------------- */
 
   .site-header {
-    background-color: #0b1120;
+    background-color: var(--page-bg);
+
     border-bottom-color: var(--border);
-  }
-
-  .post-subtitle,
-  .post-meta {
-    color: var(--muted);
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    color: #f1f5f9;
   }
 
   .site-title,
@@ -371,12 +709,58 @@ html[data-theme="dark"] {
     color: #f8fafc;
   }
 
+  .site-title:hover {
+    color: var(--accent);
+  }
+
+  .site-nav a {
+    color: var(--muted);
+  }
+
+  .site-nav a:hover {
+    color: var(--accent);
+  }
+
+
+  /* -------------------------------------------------------
+     Typography
+     ------------------------------------------------------- */
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: #f1f5f9;
+  }
+
+  .post-subtitle,
+  .post-meta {
+    color: var(--muted);
+  }
+
   a {
     color: var(--accent);
   }
 
+
+  /* -------------------------------------------------------
+     Tables
+     ------------------------------------------------------- */
+
+  .post-content table {
+    color: var(--text);
+
+    background: var(--table-bg);
+
+    border-color: var(--border);
+  }
+
   .post-content table th {
-    background: #111827;
+    background: var(--table-header-bg);
+
+    color: #f1f5f9;
   }
 
   .post-content table th,
@@ -384,27 +768,217 @@ html[data-theme="dark"] {
     border-color: var(--border);
   }
 
+
+  /* -------------------------------------------------------
+     Inline code
+     ------------------------------------------------------- */
+
   .post-content code {
     background: #1e293b;
+
     color: #e2e8f0;
   }
+
+
+  /* -------------------------------------------------------
+     Fenced code / architecture diagrams
+     ------------------------------------------------------- */
+
+  .post-content div.highlighter-rouge,
+  .post-content div.highlight,
+  .post-content pre,
+  .post-content pre.highlight {
+    background: var(--code-bg) !important;
+
+    color: var(--code-fg);
+  }
+
+
+  /* -------------------------------------------------------
+     Images
+     ------------------------------------------------------- */
 
   .post-content img,
   .post-cover {
     border-color: var(--border);
   }
 
+
+  /* -------------------------------------------------------
+     Tags
+     ------------------------------------------------------- */
+
   .tag-pill {
     background: #1e3a5f;
+
     color: #93c5fd;
   }
+
+
+  /* -------------------------------------------------------
+     Footer / list separators
+     ------------------------------------------------------- */
 
   .post-list > li {
     border-bottom-color: var(--border);
   }
 
   .site-footer {
-    background-color: #0b1120;
+    background-color: var(--page-bg);
+
     border-top-color: var(--border);
+  }
+}
+
+
+/* =========================================================
+   RESPONSIVE — TABLET / MOBILE
+   ========================================================= */
+
+@media screen and (max-width: 800px) {
+
+  .wrapper {
+    width: 92vw;
+
+    max-width: none;
+  }
+
+
+  /* -------------------------------------------------------
+     Header
+     ------------------------------------------------------- */
+
+  .site-header-inner {
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 1rem;
+
+    padding-top: 1rem;
+
+    padding-bottom: 1rem;
+  }
+
+  .site-header-left {
+    justify-content: space-between;
+  }
+
+  .site-title {
+    font-size: 1.65rem;
+
+    white-space: normal;
+  }
+
+  .site-nav {
+    justify-content: flex-start;
+
+    gap: 1.25rem;
+  }
+
+  .site-nav a {
+    font-size: 0.9rem;
+  }
+
+
+  /* -------------------------------------------------------
+     Report
+     ------------------------------------------------------- */
+
+  .post-header {
+    margin: 2.8rem 0 2.5rem;
+  }
+
+  .post-title {
+    font-size: clamp(2rem, 8vw, 3rem);
+
+    line-height: 1.1;
+  }
+
+  .post-subtitle {
+    font-size: 1rem;
+  }
+
+
+  /* -------------------------------------------------------
+     Tables
+     ------------------------------------------------------- */
+
+  .post-content table {
+    display: block;
+
+    overflow-x: auto;
+
+    white-space: normal;
+  }
+
+
+  /* -------------------------------------------------------
+     Architecture diagrams / code
+     ------------------------------------------------------- */
+
+  .post-content pre {
+    font-size: 0.76rem;
+
+    padding: 1rem;
+
+    border-radius: 8px;
+  }
+
+
+  /* -------------------------------------------------------
+     Images
+     ------------------------------------------------------- */
+
+  .post-content figure {
+    margin: 1.5rem 0;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL SCREENS
+   ========================================================= */
+
+@media screen and (max-width: 600px) {
+
+  /*
+   * Minima's original navigation has a mobile dropdown rule.
+   * We are not using that hamburger navigation, so return our
+   * custom navigation to normal document flow.
+   */
+
+  .site-nav {
+    position: static;
+
+    background: none;
+
+    border: 0;
+
+    padding: 0;
+  }
+
+  .site-title {
+    font-size: 1.45rem;
+  }
+
+  .site-nav {
+    gap: 1rem;
+  }
+
+  .site-nav a {
+    font-size: 0.82rem;
+  }
+
+  .theme-toggle {
+    width: 2.5rem;
+
+    height: 2.5rem;
+
+    font-size: 1rem;
+  }
+
+  .post-content pre {
+    font-size: 0.7rem;
   }
 }
