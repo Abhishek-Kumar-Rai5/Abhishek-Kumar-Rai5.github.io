@@ -10,15 +10,19 @@ excerpt: >-
 cover: /assets/images/gsoc_header.png
 ---
 
-Organization: [PEcAn Project](https://github.com/PecanProject/sage)
+<div class="meta-card" markdown="1">
 
-Mentors: [David LeBauer](https://github.com/dlebauer) (@dlebauer), [Pratik Pakhale](https://github.com/pratikpakhale) (@pratikpakhale), [Nihar Sanda](https://github.com/koolgax99) (@koolgax99)
+**Organization:** [PEcAn Project](https://github.com/PecanProject/sage)
 
-Student: [Abhishek Kumar Rai](https://github.com/Abhishek-Kumar-Rai5) (@Abhishek-Kumar-Rai5)
+**Mentors:** [David LeBauer](https://github.com/dlebauer) (`@dlebauer`), [Pratik Pakhale](https://github.com/pratikpakhale) (`@pratikpakhale`), [Nihar Sanda](https://github.com/koolgax99) (`@koolgax99`)
 
-Repository: [github.com/PecanProject/sage](https://github.com/PecanProject/sage)
+**Student:** [Abhishek Kumar Rai](https://github.com/Abhishek-Kumar-Rai5) (`@Abhishek-Kumar-Rai5`)
 
-Pull requests: [PecanProject/sage/pulls · author:Abhishek-Kumar-Rai5](https://github.com/PecanProject/sage/pulls?q=is%3Apr+author%3AAbhishek-Kumar-Rai5)
+**Repository:** [github.com/PecanProject/sage](https://github.com/PecanProject/sage)
+
+**Pull requests:** [PecanProject/sage/pulls · author:Abhishek-Kumar-Rai5](https://github.com/PecanProject/sage/pulls?q=is%3Apr+author%3AAbhishek-Kumar-Rai5)
+
+</div>
 
 ## Project Summary
 
@@ -298,7 +302,7 @@ starts on it.
 
 ### 7 · Pipeline hardening from real-paper evaluation ([#21](https://github.com/PecanProject/sage/pull/21))
 
-Everything in [§Deterministic Table Reconstruction](#deterministic-table-reconstruction) below, plus: safer Method
+Everything in [§Key Innovation](#key-innovation-deterministic-table-reconstruction) below, plus: safer Method
 matching (it now uses only the variable and method hint, so a Treatment level such as `"Fallow"` can no longer leak
 into and win a Method match), a `null`/blank source fact dropped as ungrounded auxiliary evidence instead of failing
 the whole record it belongs to, provider-failure classification, and the 1,046-test backend suite.
